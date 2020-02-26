@@ -8,40 +8,43 @@ from types import GeneratorType as generator
 from itertools import chain
 
 SELECTOR_OPS = [
-  "is", ">", "<", "is not", ">=", "<=", "in", "not in", ":", "and", "or", "matches", "fn"
+    "is", ">", "<", "is not", ">=", "<=", "in", "not in", ":", "and", "or", "matches", "fn"
 ]
 # it must be list because of further concatenations
 NUM_TYPES = [int, float]
 
 try:
-  NUM_TYPES += [long]
+    NUM_TYPES += [long]
 except NameError:
-  pass
+    pass
 
 STR_TYPES = [str]
 
 try:
-  STR_TYPES += [unicode]
+    STR_TYPES += [unicode]
 except NameError:
-  pass
+    pass
 
 ITER_TYPES = [list, generator, chain]
 
 try:
-  ITER_TYPES += [map, filter]
+    ITER_TYPES += [map, filter]
 except NameError:
-  pass
+    pass
+
 
 class ProgrammingError(Exception):
-  pass
+    pass
+
 
 class ExecutionError(Exception):
-  pass
+    pass
+
 
 PY_TYPES_MAP = {
-  "int": "number",
-  "float": "number",
-  "str": "string",
-  "dict": "object",
-  "list": "array"
+    "int": "number",
+    "float": "number",
+    "str": "string",
+    "dict": "object",
+    "list": "array"
 }
