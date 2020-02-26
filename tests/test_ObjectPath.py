@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
+
+from dateutil.tz import tzoffset
 
 from objectpath.core.interpreter import *
 from objectpath.core import ProgrammingError, ExecutionError
@@ -422,7 +425,6 @@ class ObjectPath(unittest.TestCase):
         self.assertEqual(execute("len('aaa')"), 3)
 
     def test_builtin_time(self):
-        import datetime
         self.assertIsInstance(execute("now()"), datetime.datetime)
         self.assertIsInstance(execute("date()"), datetime.date)
         self.assertIsInstance(execute("date(now())"), datetime.date)
@@ -432,12 +434,9 @@ class ObjectPath(unittest.TestCase):
         self.assertIsInstance(execute("time([12,23])"), datetime.time)
         self.assertIsInstance(execute("time([12,23,21,777777])"), datetime.time)
         self.assertIsInstance(execute("dateTime(now())"), datetime.datetime)
-        self.assertIsInstance(
-            execute("dateTime([2001,12,30,12,23])"), datetime.datetime
-        )
-        self.assertIsInstance(
-            execute("dateTime([2001,12,30,12,23,21,777777])"), datetime.datetime
-        )
+        self.assertIsInstance(execute("dateTime([2001,12,30,12,23])"), datetime.datetime)
+        self.assertIsInstance(execute("dateTime([2001,12,30,12,23,21,777777])"), datetime.datetime)
+        self.assertIsInstance(execute('dateTime("2019-04-08T15:05:52+02:00")'), datetime.datetime)
         self.assertIsInstance(execute('dateTime("1980-05-11 04:22:33", "%Y-%m-%d %H:%M:%S")'), datetime.datetime)
         self.assertEqual(str(execute('dateTime("1980-05-11 04:22:33", "%Y-%m-%d %H:%M:%S")')), "1980-05-11 04:22:33")
 
@@ -559,6 +558,12 @@ class ObjectPath(unittest.TestCase):
             execute2("$.store.book.(price)[0].price"),
             execute2("$.store.book[0].price")
         )
+
+    def test_isotime(self):
+        time1 = "2019-04-08T15:05:52+02:00"
+        time2 = "2019-04-08T15:05:52+01:00"
+        self.assertEqual(execute(f"dateTime('{time1}')"), datetime.datetime(2019, 4, 8, 15, 5, 52, tzinfo=tzoffset(None, 7200)))
+        self.assertEqual(execute(f"dateTime('{time2}')"), datetime.datetime(2019, 4, 8, 15, 5, 52, tzinfo=tzoffset(None, 3600)))
 
 
 class ObjectPath_Paths(unittest.TestCase):
