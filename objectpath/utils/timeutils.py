@@ -9,6 +9,7 @@ import sys
 import os
 
 import dateutil.parser
+from dateutil.relativedelta import relativedelta
 
 try:
     import pytz
@@ -20,7 +21,9 @@ from objectpath.core import STR_TYPES
 
 HOURS_IN_DAY = 24
 
-now = lambda: datetime.datetime.now(tz=pytz.utc)
+
+def now():
+    return datetime.datetime.now(tz=pytz.utc)
 
 
 def round9_10(n):
@@ -30,41 +33,12 @@ def round9_10(n):
     return i
 
 
-def age(date, reference=None, lang="en"):
+def age(date, reference=None):
     if reference is None:
         reference = now()
+    relativedelta(reference - date)
     td = reference - date  # TimeDelta
-
-    days = float(td.days)
-    if days:
-        years = round9_10(days/356)
-        if years:
-            return (years, years is 1 and "year" or "years")
-
-        months = round9_10(days/30)
-        if months:
-            return (months, months is 1 and "month" or "months")
-
-        weeks = round9_10(days/7)
-        if weeks:
-            return (weeks, weeks is 1 and "week" or "weeks")
-
-        days = int(days)
-        return (days, days is 1 and "day" or "days")
-
-    seconds = float(td.seconds)
-    if seconds is not None:
-        hours = round9_10(seconds/3600)
-        if hours:
-            return (hours, hours is 1 and "hour" or "hours")
-
-        minutes = round9_10(seconds/60)
-        if minutes:
-            return (minutes, minutes is 1 and "minute" or "minutes")
-
-        seconds = int(seconds)
-        return (seconds, seconds is 1 and "second" or "seconds")
-    # return (0,"seconds")
+    return td
 
 
 def date(d):
