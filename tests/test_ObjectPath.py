@@ -6,13 +6,9 @@ from dateutil.tz import tzoffset
 
 from objectpath.core.interpreter import *
 from objectpath.core import ProgrammingError, ExecutionError
-from random import randint, choice
-#from bson.objectid import ObjectId
 import sys
 import unittest
-import os
 
-sys.setrecursionlimit(20000)
 
 object1 = {
     "__lang__": "en",
@@ -214,23 +210,23 @@ class ObjectPath(unittest.TestCase):
         self.assertEqual(execute("float(2)%3"), float(2) % 3)
 
     def test_arithm_div(self):
-        self.assertEqual(execute("2/3"), 2.0/3)
-        self.assertEqual(execute("2.0/3"), 2.0/3)
-        self.assertEqual(execute("float(2)/3"), float(2)/3)
+        self.assertEqual(execute("2/3"), 2.0 / 3)
+        self.assertEqual(execute("2.0/3"), 2.0 / 3)
+        self.assertEqual(execute("float(2)/3"), float(2) / 3)
 
     def test_arithm_group(self):
         self.assertEqual(execute("2-3+4+5-7"), 2 - 3 + 4 + 5 - 7)
-        self.assertEqual(execute("33*2/5-2"), 33*2/5.0 - 2)
-        self.assertEqual(execute("33-4*5+2/6"), 33 - 4*5 + 2/6.0)
-        #self.assertEqual(execute("2//3//4//5"), ('//', ('//', ('//', 2, 3), 4), 5))
+        self.assertEqual(execute("33*2/5-2"), 33 * 2 / 5.0 - 2)
+        self.assertEqual(execute("33-4*5+2/6"), 33 - 4 * 5 + 2 / 6.0)
+        # self.assertEqual(execute("2//3//4//5"), ('//', ('//', ('//', 2, 3), 4), 5))
 
     def test_arithm_parentheses(self):
         self.assertEqual(execute("+6"), 6)
         self.assertEqual(execute("2+2*2"), 6)
         self.assertEqual(execute("2+(2*2)"), 6)
         self.assertEqual(execute("(2+2)*2"), 8)
-        self.assertEqual(execute("(33-4)*5+2/6"), (33 - 4)*5 + 2/6.0)
-        self.assertEqual(execute("2/3/(4/5)*6"), 2/3.0/(4/5.0)*6)
+        self.assertEqual(execute("(33-4)*5+2/6"), (33 - 4) * 5 + 2 / 6.0)
+        self.assertEqual(execute("2/3/(4/5)*6"), 2 / 3.0 / (4 / 5.0) * 6)
         self.assertEqual(execute("((2+4))+6"), ((2 + 4)) + 6)
 
     def test_logic_negatives(self):
@@ -282,7 +278,7 @@ class ObjectPath(unittest.TestCase):
         self.assertEqual(execute("None is None"), True)
         self.assertEqual(execute("{'aaa':1} is {'aaa':1}"), True)
         # oid=ObjectId()
-        #self.assertEqual(execute("ObjectID('"+str(oid)+"') is '"+str(oid)+"'"), True)
+        # self.assertEqual(execute("ObjectID('"+str(oid)+"') is '"+str(oid)+"'"), True)
 
     def test_comparison_isnot(self):
         self.assertEqual(execute("None is not None"), False)
@@ -345,7 +341,7 @@ class ObjectPath(unittest.TestCase):
         self.assertEqual(execute("int(1.0)"), 1)
         self.assertEqual(execute("int('1')"), 1)
         # Python can't handle that
-        #self.assertEqual(execute("int('1.0')"), 1)
+        # self.assertEqual(execute("int('1.0')"), 1)
         self.assertEqual(execute("float(1.0)"), 1.0)
         self.assertEqual(execute("float(1)"), 1.0)
         self.assertEqual(execute("float('1')"), 1.0)
@@ -374,8 +370,8 @@ class ObjectPath(unittest.TestCase):
         self.assertEqual(execute("avg([1.1,1.3,1.3,1.1])"), 1.2000000000000002)
         self.assertEqual(execute("avg([2,3,4,'333',[]])"), 3)
         self.assertEqual(execute("avg(1)"), 1)
-        self.assertEqual(execute("round(2/3)"), round(2.0/3))
-        self.assertEqual(execute("round(2/3,3)"), round(2.0/3, 3))
+        self.assertEqual(execute("round(2/3)"), round(2.0 / 3))
+        self.assertEqual(execute("round(2/3,3)"), round(2.0 / 3, 3))
         # edge cases
         self.assertEqual(execute("avg(1)"), 1)
         # should ommit 'sss'
@@ -523,9 +519,9 @@ class ObjectPath(unittest.TestCase):
         # these tests are passing on computers with timezone set to UTC - not the case of TravisCI
         # test of non-DST time
         # if sys.version < "3":
-        #self.assertEqual(execute("array(localize(dateTime([2000,1,1,10,10,1,0]),'Europe/Warsaw'))"), [2000,1,1,11,10,1,0])
+        # self.assertEqual(execute("array(localize(dateTime([2000,1,1,10,10,1,0]),'Europe/Warsaw'))"), [2000,1,1,11,10,1,0])
         # test of DST time
-        #self.assertEqual(execute("array(localize(dateTime([2000,7,1,10,10,1,0]),'Europe/Warsaw'))"), [2000,7,1,12,10,1,0])
+        # self.assertEqual(execute("array(localize(dateTime([2000,7,1,10,10,1,0]),'Europe/Warsaw'))"), [2000,7,1,12,10,1,0])
 
     def test_builtin_type(self):
         self.assertEqual(execute("type([1,2,3,4]+[2,4])"), "array")

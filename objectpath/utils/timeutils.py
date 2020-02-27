@@ -5,8 +5,6 @@
 # Copyright (C) 2008-2010 Adrian Kalbarczyk
 
 import datetime
-import sys
-import os
 
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
@@ -24,13 +22,6 @@ HOURS_IN_DAY = 24
 
 def now():
     return datetime.datetime.now(tz=pytz.utc)
-
-
-def round9_10(n):
-    i = int(n)
-    if n - i > 0.9:
-        return i + 1
-    return i
 
 
 def age(date, reference=None):
@@ -140,18 +131,16 @@ def dateTime(arg):
             and permutations of above
     """
     l = len(arg)
-    if l is 1:
+    if l == 1:
         dt = arg[0]
         typed = type(dt)
         if typed is str:
-            pp = dateutil.parser.isoparse(dt)
-            print(pp)
-            return pp
+            return dateutil.parser.isoparse(dt)
         if typed is datetime.datetime:
             return dt
         if typed in (tuple, list) and len(dt) in [5, 6, 7]:
             return datetime.datetime(*dt)
-    if l is 2:
+    if l == 2:
         date = time = None
         typeArg0 = type(arg[0])
         typeArg1 = type(arg[1])
