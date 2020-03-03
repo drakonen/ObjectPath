@@ -27,8 +27,7 @@ def now():
 def age(date, reference=None):
     if reference is None:
         reference = now()
-    relativedelta(reference - date)
-    td = reference - date  # TimeDelta
+    td = relativedelta(reference, date)
     return td
 
 
@@ -159,6 +158,11 @@ def dateTime(arg):
         return datetime.datetime(*date + time)
 
 # dt - dateTime, tzName is e.g. 'Europe/Warsaw'
+
+
+def timeDelta(args):
+    a = args
+    return relativedelta(years=a[0], months=a[1], days=a[2], hour=a[3], minutes=a[4], seconds=a[5])
 
 
 def UTC2local(dt, tz_name="UTC"):

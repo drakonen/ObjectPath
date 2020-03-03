@@ -3,6 +3,7 @@
 import datetime
 
 from dateutil.tz import tzoffset
+from freezegun import freeze_time
 
 from objectpath.core.interpreter import *
 from objectpath.core import ProgrammingError, ExecutionError
@@ -505,6 +506,16 @@ class ObjectPath(unittest.TestCase):
         #     execute("age(dateTime([2000,1,1,1,1,1]),dateTime([2000,1,1,1,1,2]))"),
         #     [1, "second"]
         # )
+        with freeze_time('2020-1-2'):
+            self.assertEqual(execute(
+                "dateTime('2002-01-03T00:00:00Z') + timeDelta(18, 0, 0, 0, 0, 0) <= now()"
+            ), False)
+            self.assertEqual(execute(
+                "dateTime('2002-01-02T00:00:00Z') + timeDelta(18, 0, 0, 0, 0, 0) <= now()"
+            ), True)
+            self.assertEqual(execute(
+                "dateTime('2002-01-01T00:00:00Z') + timeDelta(18, 0, 0, 0, 0, 0) <= now()"
+            ), True)
         self.assertEqual(
             execute("""array(time([0,0]) - time([0,0,0,999999]))"""),
             [23, 59, 59, 1]
@@ -560,6 +571,10 @@ class ObjectPath(unittest.TestCase):
         time2 = "2019-04-08T15:05:52+01:00"
         self.assertEqual(execute(f"dateTime('{time1}')"), datetime.datetime(2019, 4, 8, 15, 5, 52, tzinfo=tzoffset(None, 7200)))
         self.assertEqual(execute(f"dateTime('{time2}')"), datetime.datetime(2019, 4, 8, 15, 5, 52, tzinfo=tzoffset(None, 3600)))
+
+    def test_bad_stuff(self):
+        with self.assertRaises(ProgrammingError):
+            print(execute("eval(sys.env)"))
 
 
 class ObjectPath_Paths(unittest.TestCase):

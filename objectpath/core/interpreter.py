@@ -725,20 +725,24 @@ class Tree(Debugger):
                         except Exception:
                             return args[0]
                 # time
-                elif fnName in ("now", "age", "time", "date", "dateTime"):
+                elif fnName in ("now", "age", "time", "date", "dateTime", "timeDelta"):
                     if fnName == "now":
                         return timeutils.now()
-                    if fnName == "date":
+                    elif fnName == "date":
                         return timeutils.date(args)
-                    if fnName == "time":
+                    elif fnName == "time":
                         return timeutils.time(args)
-                    if fnName == "dateTime":
+                    elif fnName == "dateTime":
                         return timeutils.dateTime(args)
-                    if fnName == "age":
+                    elif fnName == "age":
                         a = {}
                         if len(args) > 1:
                             a["reference"] = args[1]
                         return timeutils.age(args[0], **a)
+                    elif fnName == "timeDelta":
+                        if len(args) != 6:
+                            raise ExecutionError("timeDelta requires 6 arguments, years, months, days, hours, minutes, seconds")
+                        return timeutils.timeDelta(args)
                 elif fnName == "toMillis":
                     args = args[0]
                     if args.utcoffset() is not None:
