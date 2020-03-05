@@ -733,6 +733,10 @@ class Tree(Debugger):
                     elif fnName == "time":
                         return timeutils.time(args)
                     elif fnName == "dateTime":
+                        if len(args) == 0:
+                            raise ExecutionError("dateTime needs a value")
+                        if args[0] is None:
+                            raise ExecutionError("Can't dateTime on None")
                         return timeutils.dateTime(args)
                     elif fnName == "age":
                         a = {}

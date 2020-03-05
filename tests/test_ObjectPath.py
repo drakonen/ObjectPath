@@ -506,6 +506,12 @@ class ObjectPath(unittest.TestCase):
         #     execute("age(dateTime([2000,1,1,1,1,1]),dateTime([2000,1,1,1,1,2]))"),
         #     [1, "second"]
         # )
+        with self.assertRaises(ExecutionError):
+            execute("dateTime()")
+
+        with self.assertRaises(ExecutionError):
+            execute("dateTime(None)")
+
         with freeze_time('2020-1-2'):
             self.assertEqual(execute(
                 "dateTime('2002-01-03T00:00:00Z') + timeDelta(18, 0, 0, 0, 0, 0) <= now()"
